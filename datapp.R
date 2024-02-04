@@ -1,3 +1,5 @@
+#DataPreprocessing
+
 x=read.csv("datapreprocessing.csv")
 
 View(x)
@@ -6,6 +8,7 @@ dim(x)
 ##name of attributes
 names(x)
 
+##+++++++++++++++++
 #Chapter 2: Data pre processing
 #Inconsistent values
 
@@ -18,6 +21,7 @@ table(x$Gender)
 x$Gender=gsub("Child", NA, x$Gender)
 table(x$Gender)
 x$Gender
+table(is.na(x$Gender))
 
 #Height  ##nature numerical 
 summary(x$Height)
@@ -55,6 +59,7 @@ x_height
 x_height=as.numeric(x_height)
 summary(x_height)
 
+##+++++++++++++++++
 #Chapter 2: Data pre processing
 #Duplicated rows 
 x=read.csv("datapreprocessing.csv")
@@ -85,6 +90,8 @@ table(y_dup)
 
 
 
+
+##+++++++++++++++++
 #+Chapter 2: Data pre processing+#
 #Missing Values#
 
@@ -162,6 +169,8 @@ md.pattern(x.nona)
 #write.csv(x.nona, file = "no_na_values.csv")
 
 
+
+##+++++++++++++++++
 #+Chapter 2: Data pre processing
 #+outliers
 
@@ -192,8 +201,11 @@ boxplot.stats(x$Height)
 x_new_height=x[x$Height>58, ]
 boxplot(x_new_height$Height, horizontal = T)
 
+
+
+##+++++++++++++++++
 #Chapter 2: Data pre processing
-#data transformations
+#Variable transformations
 
 names(x)
 ##Height in cm>>>generate a new var height in foot/feet

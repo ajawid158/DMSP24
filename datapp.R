@@ -34,6 +34,7 @@ x$Height
 class(x$Height)
 x$Height=as.numeric(x$Height)
 summary(x$Height)
+class(x$Height)
 
 #Weight
 summary(x$Weight)
@@ -88,9 +89,7 @@ y_unique=unique(y)
 y_dup=duplicated(y_unique)
 table(y_dup)
 
-
-
-
+##few variables but a lot of observation/objects
 ##+++++++++++++++++
 #+Chapter 2: Data pre processing+#
 #Missing Values#

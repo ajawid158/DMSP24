@@ -21,7 +21,7 @@ fNonS=filter(dfTips, sex=="Female", smoker=='No')
 head(fNonS)
 dim(fNonS)
 
-#logical operators &, |, !
+#logical operators &, |, ! AND OR NOT
 unique(dfTips$day)
 
 weekend=filter(dfTips, day=='Sun'| day=='Sat')  #day==Sat | Sun

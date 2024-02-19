@@ -39,7 +39,7 @@ View(x.train)
 
 x.test=x[-s,]
 View(x.test)
-head(x.train)
+
 
 #Step 3: Construct the prediction models using x.train 
 #Step 3.1. Model 0
@@ -63,37 +63,6 @@ y.pred
 plot(x.train$Salary, y.pred, 
      col='red')
 
-#put them together
-
-##Probem: we want to predict Employee's Spending using a vector of 
-#relevant variables such as Salary, Gender, Working Hrs
-
-#Step 1: check their correlation 
-x.sub=data.frame(x$Spending, x$Salary, x$WrH, x$GenCode)
-names(x.sub)=c("Spending", "Salary", "WH", "Gender")
-View(x.sub)
-x.cor=cor(x.sub)
-x.cor
-
-library(corrplot)
-corrplot(x.cor, method = "pie", 
-         type="lower")
-##Step 2: split the dataset into trainig and test 
-library(dplyr)
-nrow(x)
-0.8*30
-
-s=sample(nrow(x), 24)
-s
-x.train=x[s,]
-x.test=x[-s,]
-
-##Step 3: Construct the prediction models using x.train 
-##Step 3.1. Model 0
-###Regression and Prediction
-names(x.train)
-lm0=lm(Spending~Salary, data = x.train)
-y.pred=lm0$fitted.values
 
 
 all.y=data.frame(x.train$Spending, y.pred)
@@ -115,7 +84,7 @@ sum(y.test$x.test.Spending...lm0.test)
 ##Sum of Squared Error
 
 SSE0=sum((x.test$Spending- lm0.test)^2)
-SSE0   #36.6
+SSE0   #
 
 #Step 4: WrHr
 #Add another variable
@@ -125,7 +94,7 @@ lm1=lm(Spending~Salary+WrH, data = x.train)
 lm1.test=predict(lm1, x.test)
 lm1.test
 SSE1=sum((x.test$Spending- lm1.test)^2)
-SSE1  #37.6
+SSE1  #
 
 
 ##Model 2
@@ -135,7 +104,7 @@ lm2=lm(Spending~Salary+WrH+GenCode, data = x.train)
 lm2.test=predict(lm2, x.test)
 lm2.test
 SSE2=sum((x.test$Spending- lm2.test)^2)
-SSE2  #40
+SSE2  #
 
 #Step 5: Make a decision which model to go for?
 #choose the best Model Based on SSE
@@ -158,35 +127,3 @@ pspending.new.empl
 
 #Y the amount of purchase one makes when they visit an online shop
 #X the time the spend on the website, Location, how many time per week they visit
-
-#LmBest
-
-lm0.test=predict(lm0, x.test)
-y.test=data.frame(x.test$Spending, lm0.test)
-View(y.test)
-###########################
-SSE0=sum((x.test$Spending- lm0.test)^2)
-SSE0
-
-#Step 4:
-lm1=lm(Spending~Salary+WrH, data = x.train)
-lm1.test=predict(lm1, x.test)
-SSE1=sum((x.test$Spending- lm1.test)^2)
-SSE1
-
-##Model 2
-
-lm2=lm(Spending~Salary+WrH+GenCode, data = x.train)
-lm2.test=predict(lm2, x.test)
-SSE2=sum((x.test$Spending- lm2.test)^2)
-SSE2
-
-#Step 5: choose the best Model  Model 0 entailed the lowest error
-##Make prediction with the model
-View(x)
-# a New employee comes with salary of 34 T
-new.emp=data.frame(Salary = c(34, 50, 30))
-
-names(new.emp)="Salary"
-predict(lm0,new.emp)
-##the new epm spends about 21600

@@ -8,6 +8,7 @@ names(x)
 
 dim(x)
 
+
 ##Probem: we want to predict Employee's Spending using a vector of 
 #relevant predictors X, such as Salary, Gender, Working Hrs, etc.
 
@@ -34,16 +35,17 @@ nrow(x)
 
 s=sample(nrow(x), 21)
 s
-x.train=x[s,]
+x.train=x[s,]   #Training dataset    x[ , ]
 View(x.train)
 
-x.test=x[-s,]
+x.test=x[-s,]    #test dataset   
 View(x.test)
 
 
 #Step 3: Construct the prediction models using x.train 
+
 #Step 3.1. Model 0
-#Regression and Prediction
+#Regression and Prediction  Y: Spending    X: Salary
 names(x.train)
 #Predict Spending using Salary
 cor(x.train$Spending, x.train$Salary)
@@ -60,10 +62,6 @@ lm0=lm(Spending~Salary, data = x.train)
 y.pred=lm0$fitted.values   #we made predictions 
 y.pred
 
-plot(x.train$Salary, y.pred, 
-     col='red')
-
-
 
 all.y=data.frame(x.train$Spending, y.pred)
 View(all.y)
@@ -79,32 +77,40 @@ lm0.test  #these are the predicted spendings of the 9 objects in the test datase
 y.test=data.frame(x.test$Spending, lm0.test,x.test$Spending-lm0.test)
 View(y.test)
 
-sum(y.test$x.test.Spending...lm0.test)
+#sum(y.test$x.test.Spending...lm0.test)
 ###########################
 ##Sum of Squared Error
 
 SSE0=sum((x.test$Spending- lm0.test)^2)
-SSE0   #
+SSE0   #23.16
 
 #Step 4: WrHr
 #Add another variable
 
-lm1=lm(Spending~Salary+WrH, data = x.train)
+lm1=lm(Spending~WrH, data = x.train)   #Construct the model Model1
 
 lm1.test=predict(lm1, x.test)
 lm1.test
 SSE1=sum((x.test$Spending- lm1.test)^2)
-SSE1  #
+SSE1  #168.3
 
+#Add another variable
 
-##Model 2
-#Add another predictor: Gender
+lm2=lm(Spending~GenCode, data = x.train)   #Construct the model Model2 using Gender
 
-lm2=lm(Spending~Salary+WrH+GenCode, data = x.train)
 lm2.test=predict(lm2, x.test)
 lm2.test
 SSE2=sum((x.test$Spending- lm2.test)^2)
-SSE2  #
+SSE2  #637
+
+##Model 3
+#Add another predictor: Gender
+
+lm3=lm(Spending~Salary+WrH+GenCode, data = x.train)
+lm3.test=predict(lm3, x.test)
+lm3.test
+SSE3=sum((x.test$Spending- lm3.test)^2)
+SSE3  #23.34
 
 #Step 5: Make a decision which model to go for?
 #choose the best Model Based on SSE
@@ -127,3 +133,4 @@ pspending.new.empl
 
 #Y the amount of purchase one makes when they visit an online shop
 #X the time the spend on the website, Location, how many time per week they visit
+

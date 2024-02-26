@@ -2,10 +2,22 @@ x=read.csv("employee.csv")
 names(x)
 dim(x)
 head(x)
+View(x)
 
-s=sample(nrow(x), 24)
+
+#problem:::predict the class of employees in terms of whether they go to gym or not
+
+#Y=Gym [yes=1. no=0]
+#X=Gender, Age, Weight, Whr
+
+0.7*30
+
+s=sample(nrow(x), 21)
+
 x.train=x[s,]
 x.test=x[-s,]
+
+View(x.train)
 
 ##Predict the MS of the employees let say using their Age, Gender, Salary
 #Model 0 Whether sobd going to gym or NOT?

@@ -17,6 +17,7 @@ g.train=g.x[s, ]
 g.test=g.x[-s, ]
 
 train.y=g.y[s]
+head(train.y)
 test.y=g.y[-s]
 NROW(train.y)
 
@@ -26,14 +27,14 @@ sqrt(nrow(g))  ###k=11 better to be odd
 library(class)
 
 g.knn=knn(train = g.train, test = g.test, cl = train.y, k=11)
-table(g.knn)
-table(test.y)
+table(g.knn)  #predicted by knn
+table(test.y)   #actual data
 g.pr=data.frame(g.test$MT, g.test$Q, test.y, g.knn)
 View(g.pr)
 ##Confusion matrix
 table(test.y, g.knn)
 
-err.knn= 2/NROW(test.y)
+err.knn= 6/NROW(test.y)
 err.knn
 
 ######################New data 

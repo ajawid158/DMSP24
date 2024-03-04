@@ -29,7 +29,7 @@ L.m1=glm(Gymcode~Weight, family = "binomial", data = x.train)
 
 m0.pr.train=fitted(L.m0, x.train)
 #summary(m0.pr.train)
-plot(x.train$Age, m0.pr.train, col="blue", pch=12)
+plot(x.train$Weight, m0.pr.train, col="blue", pch=12)
 
 ###Make predication with the model 
 m1_pr=predict(L.m1, x.test)

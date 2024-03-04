@@ -26,6 +26,7 @@ nn=neuralnet(Grade~Oral+Q, data =x.train, hidden = 3,
              act.fct = "logistic", linear.output = FALSE)
 plot(nn)
 
+help("neuralnet")
 ##Compute the error rate using test dataset 
 pr.test=compute(nn, x.test)
 

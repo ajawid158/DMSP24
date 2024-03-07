@@ -33,6 +33,8 @@ pr.test=compute(nn, x.test)
 
 p1=pr.test$net.result
 head(p1)
+
+head(p1)
 pred=ifelse(p1>0.5, 1, 0)  ###dummy variable
 pred
 table(x.test.y, pred)   ##confussion matrix

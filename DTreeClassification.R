@@ -22,9 +22,27 @@ head(pred)
 table(g.test$Grade, pred) #confusion matrix
 Err.rate=4/NROW(g.test)
 Err.rate #16%
+
+help("rpart")
 ####New Dataset
-Q=c(85, 80, 30)
+Q=c(89, 80, 30)
 Oral=c(88, 70, 90)
 new.st=data.frame(cbind(Q, Oral))
 pred.new=predict(fit, new.st, type = "class")
 pred.new
+
+
+###Regression Tree
+d=read.csv("tips.csv")
+names(d)
+d.sub=d[,c(2,3,4)]
+head(d.sub)
+s=sample(nrow(d.sub), floor(0.7*nrow(d.sub)))
+g.train=d.sub[s, ]
+g.test=d.sub[-s,]
+
+fit=rpart(total_bill~., data = g.train, method = "anova")
+print(fit)
+plotcp(fit)
+plot(fit,
+     main="Regression Tree for Mileage ")

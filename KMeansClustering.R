@@ -4,9 +4,9 @@
 #                                               #
 ##++++++++++++++++++++++++++++++++++++++++++++++#
 library(factoextra)
-
+library(dplyr)
 x=read.csv("employee.csv")
-head(x)
+names(x)
 
 ##Lets cluster the employees wrt physical characteristics
 
@@ -15,7 +15,7 @@ names(x)
 x1=x %>%
   select(Height, Weight)
 head(x1)
-
+#help("fviz_nbclust")
 ##apply k-means clustering to cluster the employees
 #First: Optimal k
 n_clust=fviz_nbclust(x1, kmeans, method = "silhouette")
@@ -27,7 +27,7 @@ k_m=kmeans(x1, 2)
 h_w_cl=k_m$cluster
 h_w_cl
 x1=cbind(x1, h_w_cl)
-head(x1)
+View(x1)
 
 ##display it 
 plot(x1$Height, x1$Weight,
@@ -43,4 +43,8 @@ legend(165,90,unique(x1$h_w_cl),
 head(x1)
 x1=x1 %>%
   mutate(y=ifelse(h_w_cl==2, 1,0))
-head(x1)
+View(x1)
+
+#PCA next WEEK.
+#Assignment::::Use the employee dataset and apply h and kmeans clustering 
+#for grouping the employees based on the certain characteristics.

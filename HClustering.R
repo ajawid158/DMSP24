@@ -3,13 +3,11 @@
 #        Clustering//H-Clustering               #
 #                                               #
 ##++++++++++++++++++++++++++++++++++++++++++++++#
-
-
-setwd("G:/My Drive/Spring23/ITC360/Datasets")
-##a new data set on students scores and grades (real dataset)
 library(dplyr)
+library(factoextra)
 g=read.csv("employee.csv")
 names(g)
+dim(g)
 
 ##cluster the employees wrt to their H/W
 
@@ -18,6 +16,8 @@ g1=g %>%
 
 head(g1)
 
+n_clust=fviz_nbclust(g1, FUNcluster = hcut,  method = "silhouette")
+n_clust
 
 h1=hclust(dist(g1), method = "average")
 plot(h1)
@@ -64,7 +64,7 @@ head(g1)
 g1=g1%>%
   mutate(y=ifelse(hw.cl==1, 0, 1))
 head(g1)
-
+View(g1)
 ##Lets make prediction using logistic regression
 #usign y as classifier
 

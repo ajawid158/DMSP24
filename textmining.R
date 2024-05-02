@@ -77,6 +77,11 @@ fr
 
 
 
+
+
+
+
+
 ###customers feedback on Apple's product
 
 t=read.csv("tweets.csv", stringsAsFactors = FALSE)

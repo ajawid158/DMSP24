@@ -1,84 +1,128 @@
-#install.packages("tm")
+#required packages
 library(tm)
-#install.packages("snowballC")
 library(SnowballC)
 library(dplyr)
-#install.packages('pacman')
-#install.packages('qdap')
 library(qdap)
-#library(qdapTools)
-#library(tidyverse)
-#upload the dataset.
 
+##upload the dataset 
 ibis=read.csv("ibishotel.csv", stringsAsFactors = FALSE)
 View(ibis)
 str(ibis)
-head(ibis)
 
-ibis=ibis %>%
-  mutate(positive=Rating>3)
-head(ibis)
-View(ibis)
-
-ibis=ibis %>%
-  mutate(y=ifelse(positive==F, 0, 1))
-head(ibis)
-View(ibis)
-
-fr=freq_terms(ibis$Reviews,20) #top 20 most frequent terms
+##frequency of the words in the Review column 
+fr=freq_terms(ibis)
 fr
 plot(fr)
 
-##Build Corpus>>document
+##Creat documents
+ibiscr=Corpus(VectorSource(ibis$Reviews))
+ibiscr[[2]]$content
 
-ibiscrp=Corpus(VectorSource(ibis$Reviews))
-inspect(ibiscrp)
-
-#view the review
-ibiscrp[[2]]$content
-content(ibiscrp[[20]])
-
-##Pre-processing
-##lower case
-
-ibiscrp =ibiscrp %>%
+#1. trun all words to lower case
+ibiscr= ibiscr %>%
   tm_map(tolower)
-ibiscrp[[2]]$content
+ibiscr[[2]]$content
 
-#Remove punctuation
-ibiscrp =ibiscrp %>%
+#2. Remove punctuations
+ibiscr = ibiscr %>%
   tm_map(removePunctuation)
-ibiscrp[[2]]$content
+ibiscr[[2]]$content
 
-##Remove Stopwords
-stopwords("english")   ##stopwords in English
-ibiscrp= ibiscrp %>%
-  tm_map(removeWords, c("hotel", "koblenz", stopwords("english")))
-ibiscrp[[2]]$content
+#3. removing the stopwords 
+stopwords("english")
+ibiscr =ibiscr %>%
+  tm_map(removeWords, c("hotel", "koblenz", "ibis", stopwords("english")))
+ibiscr[[2]]$content
 
-#4 Stemming 
-ibiscrp=ibiscrp %>%
-  tm_map(stemDocument)
-ibiscrp[[2]]$content
-
-##remove numbers
-ibiscrp = ibiscrp %>%
+#4. Remove numbers
+ibiscr = ibiscr %>%
   tm_map(removeNumbers)
-ibiscrp[[2]]$content
+ibiscr[[2]]$content
 
-#Strip white space 
-ibiscrp = ibiscrp %>%
+#5. stripping the white space
+ibiscr= ibiscr %>%
   tm_map(stripWhitespace)
-ibiscrp[[2]]$content
+ibiscr[[2]]$content
 
-fr=freq_terms(ibiscrp, 50)
-plot(fr)
-fr
+#6. Stemming
+ibiscr = ibiscr %>%
+  tm_map(stemDocument)
+
+ibiscr[[2]]$content
+fr1=freq_terms(ibiscr, 10)
+plot(fr1)
+View(ibiscr)
+
+
+#Feature Extraction 
+ibisfreq=DocumentTermMatrix(ibiscr)
+
+dim(ibisfreq)    #39 rows and 289 variables
+
+inspect(ibisfreq)
+
+inspect(ibisfreq)[1:4, 1:3]   #document 1:4 columns 1:3
+
+findFreqTerms(ibisfreq)
+l=findFreqTerms(ibisfreq, lowfreq = 8)
+length(l)
+##we have many features with too many zeros, high sparsity
+ibissparse=removeSparseTerms(ibisfreq, 0.90)  
+##keep only the terms that appears in 10% or more of the feedback/documents/columns
+dim(ibissparse)
+View(ibissparse)
+inspect(ibissparse)
+##convert it to dataframe 
+ibis_review=as.data.frame(as.matrix(ibissparse))
+View(ibis_review)
+dim(ibis_review)
+
+###visualize the freq of terms
+
+ibis_names=colnames(ibis_review)
+View(ibis_names)
+
+ibis_freq=c()
+
+for (i in 1:25){
+  ibis_freq[i]=sum(ibis_review[,i])
+}
+View(ibis_freq)
+barplot(ibis_freq,
+        col=rainbow(25), 
+        names.arg = ibis_names)
+ibis_review[,2]
+####Sentiment analysis 
+#create your sentiment variable
+View(ibis)
+rate=ibis$Rating
+View(ibis_review)
+ibis_review= ibis_review %>%
+  mutate(y=ifelse(rate>3, "Positive","Negative"))
+View(ibis_review)
+
+##which terms derive positive rating
+#decision tree
+library(rpart)
+library(rpart.plot)
+ibis_sent=rpart(y~.,
+                data = ibis_review,
+                method = "class")
+#prp(ibis_sent)
+rpart.plot(ibis_sent, extra = 106)
+
+#somehow surprising!
+
+sb=ibis_review %>%
+  select(breakfast,y)
+
+View(sb)
+table(sb)
+##you may use this to make prediction model
 
 
 
-
-
+##APPLE EXAMPLE
 
 
 

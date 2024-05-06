@@ -70,7 +70,7 @@ length(l)
 ibissparse=removeSparseTerms(ibisfreq, 0.90)  
 ##keep only the terms that appears in 10% or more of the feedback/documents/columns
 dim(ibissparse)
-View(ibissparse)
+
 inspect(ibissparse)
 ##convert it to dataframe 
 ibis_review=as.data.frame(as.matrix(ibissparse))
@@ -80,18 +80,18 @@ dim(ibis_review)
 ###visualize the freq of terms
 
 ibis_names=colnames(ibis_review)
-View(ibis_names)
+
 
 ibis_freq=c()
 
 for (i in 1:25){
   ibis_freq[i]=sum(ibis_review[,i])
 }
-View(ibis_freq)
+ibis_freq
 barplot(ibis_freq,
         col=rainbow(25), 
         names.arg = ibis_names)
-ibis_review[,2]
+
 ####Sentiment analysis 
 #create your sentiment variable
 View(ibis)
@@ -119,6 +119,11 @@ sb=ibis_review %>%
 View(sb)
 table(sb)
 ##you may use this to make prediction model
+
+
+
+
+
 
 
 
